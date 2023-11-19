@@ -2,6 +2,7 @@ package com.example.sideproject0.dto;
 
 import com.example.sideproject0.constant.RoleType;
 import com.example.sideproject0.constant.UserStatus;
+import com.example.sideproject0.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +30,8 @@ public record UserDto(
         );
     }
 
+    public static UserDto of(User user) {
+        if(user == null) return null;
+        return new UserDto(user.getUniqId(), user.getUserId(), user.getUsername(), user.getPassword(), user.getUserStatus(), user.getEmail(), user.getRoleType(), user.getCreateDate(), user.getUpdateDate());
+    }
 }

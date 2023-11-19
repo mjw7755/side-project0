@@ -2,6 +2,7 @@ package com.example.sideproject0.entity;
 
 import com.example.sideproject0.constant.RoleType;
 import com.example.sideproject0.constant.UserStatus;
+import com.example.sideproject0.converter.RoleTypeConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +33,8 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
+    @Convert(converter = RoleTypeConverter.class)
     private RoleType roleType;
 
     @Column(name = "status", nullable = false)
