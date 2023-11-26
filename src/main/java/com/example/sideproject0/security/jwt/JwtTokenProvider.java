@@ -11,14 +11,13 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtTokenUtil {
+public class JwtTokenProvider {
 
     private static final long EXPIRE_TIME = 1000 * 60 * 60;
 
+    private final String secretKey; 
 
-    private final String secretKey;
-
-    public JwtTokenUtil(@Value("${jwt.token.secretkey}")String secretKey) {
+    public JwtTokenProvider(@Value("${jwt.token.secretkey}")String secretKey) {
         this.secretKey = secretKey;
     }
 
@@ -43,7 +42,7 @@ public class JwtTokenUtil {
         return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.secretKey))).build().parseClaimsJws(token).getBody().get("userId").toString();
     }
 
-    // 밝급된 Token이 만료 시간이 지났는지 체크
+    // 발급된 Token이 만료 시간이 지났는지 체크
     public boolean isExpired(String token) {
         Date expiredDate = Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.secretKey))).build().parseClaimsJws(token).getBody().getExpiration();
         // Token의 만료 날짜가 지금보다 이전인지 check

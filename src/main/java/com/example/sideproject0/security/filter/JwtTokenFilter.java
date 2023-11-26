@@ -1,7 +1,7 @@
 package com.example.sideproject0.security.filter;
 
 import com.example.sideproject0.entity.User;
-import com.example.sideproject0.security.jwt.JwtTokenUtil;
+import com.example.sideproject0.security.jwt.JwtTokenProvider;
 import com.example.sideproject0.service.LoginService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +25,7 @@ import java.util.List;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final LoginService loginService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -47,13 +47,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = authorizationHeader.split(" ")[1];
 
         // 전송받은 Jwt Token이 만료되었으면 => 다음 필터 진행(인증 X)
-        if(jwtTokenUtil.isExpired(token)) {
+        if(jwtTokenProvider.isExpired(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         // Jwt Token에서 loginId 추출
-        String userId = jwtTokenUtil.getLoginId(token);
+        String userId = jwtTokenProvider.getLoginId(token);
 
         // 추출한 userId로 User 찾아오기
         User user = loginService.getLoginUserByUserId(userId);

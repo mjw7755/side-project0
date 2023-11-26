@@ -2,7 +2,7 @@ package com.example.sideproject0.controller;
 
 import com.example.sideproject0.dto.UserDto;
 import com.example.sideproject0.entity.User;
-import com.example.sideproject0.security.jwt.JwtTokenUtil;
+import com.example.sideproject0.security.jwt.JwtTokenProvider;
 import com.example.sideproject0.service.LoginService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ import java.util.Map;
 public class ApiController {
 
     private final LoginService loginService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public ApiController(LoginService loginService, JwtTokenUtil jwtTokenUtil) {
+    public ApiController(LoginService loginService, JwtTokenProvider jwtTokenProvider) {
         this.loginService = loginService;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @GetMapping("/test.do")
@@ -47,7 +47,7 @@ public class ApiController {
             return ResponseEntity.ok("로그인 아이디 또는 비밀번호가 틀렸습니다.");
         }
 
-        String jwtToken = jwtTokenUtil.createToken(userdto.userId());
+        String jwtToken = jwtTokenProvider.createToken(userdto.userId());
 
         return ResponseEntity.ok().body(jwtToken);
     }
